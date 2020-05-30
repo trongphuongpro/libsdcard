@@ -34,12 +34,12 @@ void tiva_sdcard_init(uint32_t SSI_base__, PortPin_t SS__) {
 }
 
 // asserts the CS pin to the card
-void SELECT(void) {
+void select_card(void) {
     ROM_GPIOPinWrite(SS.base, SS.pin, 0);
 }
 
 // de-asserts the CS pin to the card
-void DESELECT(void) {
+void deselect_card(void) {
     ROM_GPIOPinWrite(SS.base, SS.pin, SS.pin);
 }
 
@@ -48,7 +48,7 @@ void DESELECT(void) {
 /* Transmit a byte to MMC via SPI  (Platform dependent)                  */
 /*-----------------------------------------------------------------------*/
 
-void xmit_spi(BYTE dat) {
+void spi_transmit_byte(BYTE dat) {
     uint32_t ui32RcvDat;
 
     ROM_SSIDataPut(SSI_base, dat); /* Write the data to the tx fifo */
@@ -61,7 +61,7 @@ void xmit_spi(BYTE dat) {
 /* Receive a byte from MMC via SPI  (Platform dependent)                 */
 /*-----------------------------------------------------------------------*/
 
-BYTE rcvr_spi(void) {
+BYTE spi_receive_byte(void) {
     uint32_t ui32RcvDat;
 
     ROM_SSIDataPut(SSI_base, 0xFF); /* write dummy data */
@@ -72,8 +72,8 @@ BYTE rcvr_spi(void) {
 }
 
 
-void rcvr_spi_m(BYTE *dst) {
-    *dst = rcvr_spi();
+void spi_receive_byte_m(BYTE *dst) {
+    *dst = spi_receive_byte();
 }
 
 
@@ -82,7 +82,7 @@ void send_initial_clock_train(void) {
     uint32_t ui32Dat;
 
     /* Ensure CS is held high. */
-    DESELECT();
+    deselect_card();
 
     /* Switch the SSI TX line to a GPIO and drive it high too. */
     //ROM_GPIOPinTypeGPIOOutput(SDC_GPIO_PORT_BASE, SDC_SSI_TX);

@@ -14,11 +14,11 @@ extern "C" {
 #include <stdbool.h>
 #include "ff.h"
 
-void SELECT(void);
-void DESELECT(void);
-void xmit_spi(BYTE dat);
-BYTE rcvr_spi(void);
-void rcvr_spi_m(BYTE *dst);
+void select_card(void);
+void deselect_card(void);
+void spi_transmit_byte(BYTE dat);
+BYTE spi_receive_byte(void);
+void spi_receive_byte_m(BYTE *dst);
 void send_initial_clock_train(void);
 void set_max_speed(void);
 
