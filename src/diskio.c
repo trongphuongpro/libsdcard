@@ -8,6 +8,7 @@
 /*-----------------------------------------------------------------------*/
 
 #include "diskio.h"		/* FatFs lower layer API */
+#include "ff.h"
 #include "sdcard_port.h"		/* Example: Header file of existing MMC/SDC contorl module */
 
 /* Definitions for MMC/SDC command */
@@ -123,7 +124,7 @@ DRESULT disk_read (
     BYTE drv,            /* Physical drive nmuber (0) */
     BYTE *buff,            /* Pointer to the data buffer to store read data */
     DWORD sector,        /* Start sector number (LBA) */
-    BYTE count            /* Sector count (1..255) */
+    UINT count            /* Sector count (1..255) */
 )
 {
     if (drv || !count) return RES_PARERR;
@@ -158,12 +159,13 @@ DRESULT disk_read (
 /* Write Sector(s)                                                       */
 /*-----------------------------------------------------------------------*/
 
-#if _READONLY == 0
+#if FF_FS_READONLY == 0
+
 DRESULT disk_write (
     BYTE drv,            /* Physical drive nmuber (0) */
     const BYTE *buff,    /* Pointer to the data to be written */
     DWORD sector,        /* Start sector number (LBA) */
-    BYTE count            /* Sector count (1..255) */
+    UINT count            /* Sector count (1..255) */
 )
 {
     if (drv || !count) return RES_PARERR;
@@ -205,7 +207,6 @@ DRESULT disk_write (
 /* Miscellaneous Functions                                               */
 /*-----------------------------------------------------------------------*/
 
-#if _USE_IOCTL
 DRESULT disk_ioctl (
     BYTE drv,        /* Physical drive nmuber (0) */
     BYTE ctrl,        /* Control code */
@@ -304,7 +305,6 @@ DRESULT disk_ioctl (
 
     return res;
 }
-#endif
 
 
 /*-----------------------------------------------------------------------*/
@@ -404,7 +404,7 @@ bool rcvr_datablock (
 }
 
 
-#if _READONLY == 0
+#if FF_FS_READONLY == 0
 bool xmit_datablock (
     const BYTE *buff,    /* 512 byte data block to be transmitted */
     BYTE token            /* Data/Stop token */

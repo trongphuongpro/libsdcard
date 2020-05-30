@@ -12,9 +12,8 @@ extern "C" {
 
 #include <stdint.h>
 #include <stdbool.h>
-    
-#include "integer.h"
-#include "ff.h"
+
+#include "ff.h"    
 #include "utils_tiva.h"
 
 void tiva_sdcard_init(uint32_t SSI_base, PortPin_t SS);
